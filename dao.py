@@ -1,8 +1,11 @@
 from app.db.DBHelper import DBHelper
 
 
-# 通过评分方式获取课程 1=5级 3=百分 2=2级
 def getCoursesByScoreMethod(score_method):
+    """
+    :param score_method: 评分方式获取课程 1=5级 3=百分 2=2级
+    :return: 课程列表
+    """
     db = DBHelper()
     sql = "select id from course where score_method = %s" % score_method
     res = db.select(sql)
@@ -12,10 +15,13 @@ def getCoursesByScoreMethod(score_method):
     return ids
 
 
-# 通过课程 获取所有学生的成绩
 def getStuIdAndScoreByCourseId(course_ids):
+    """
+    :param course_ids: 课程列表
+    :return: {stuid:xxx,score:xxx}
+    """
     db = DBHelper()
-    sql = "select student_id as stuId,score as grade" \
+    sql = "select student_id as stuId,grade as grade" \
           "from student_course where course_id in %s" % course_ids
     res = db.select(sql)
     return res
@@ -28,3 +34,15 @@ def getCourseById(course_id):
           "from course where id = %s" % course_id
     res = db.select(sql)
     return res[0]
+
+
+def getCourseGrade(courseId):
+    """
+    :param courseId: 课程id
+    :return: 返回所有该课程的成绩
+    """
+    db = DBHelper()
+    sql = "select *" \
+          "from student_course where course = %s" % courseId
+    res = db.select(sql)
+    return res
