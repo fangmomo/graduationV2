@@ -89,11 +89,11 @@ def getStudentClassGradesRelatedRules():
 
 
 def mul(a, b):
-    sum = 0.0
+    sum_ab = 0.0
     for i in range(len(a)):
         temp = a[i] * b[i]
-        sum += temp
-    return sum
+        sum_ab += temp
+    return sum_ab
 
 
 # 计算皮尔逊相关系数 因果是相关 相关不一定是因果 相关系数表示因果关系的程度  不是相关关系可以使用关联分析

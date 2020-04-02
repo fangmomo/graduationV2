@@ -43,6 +43,35 @@ def getCourseGrade(courseId):
     """
     db = DBHelper()
     sql = "select *" \
-          "from student_course where course = %s" % courseId
+          "from student_course where course_id = %s" % courseId
+    res = db.select(sql)
+    return res
+
+
+def getCourseTeacher(course_id, teacher_id):
+    """
+    :param course_id: 课程id
+    :param teacher_id: 老师id
+    :return: 返回指定老师课程对象
+    """
+    db = DBHelper()
+    sql = "select *" \
+          "from course_teacher where course_id = %s and teacher_id = %s" % (course_id, teacher_id)
+    res = db.select(sql)
+    return res[0]
+
+
+def getGradeByCourseIdAndTeacherIdAndStuLevel(course_id, teacher_id, stu_level):
+    """
+    :param course_id: 课程
+    :param teacher_id: 老师
+    :param stu_level: 学生届数
+    :return: 学生成绩
+    """
+    db = DBHelper()
+    sql = "select grade" \
+          "from student_course where course_id = %s and teacher_id = %s and student_level = %s" % (
+              course_id, teacher_id,
+              stu_level)
     res = db.select(sql)
     return res
