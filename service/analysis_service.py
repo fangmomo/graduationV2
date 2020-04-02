@@ -1,5 +1,8 @@
+from rest_framework.exceptions import ValidationError
+
 from app.analysis.apriori import *
 from app.dao import *
+from common.log import logger
 
 
 def getMaxRelated(rules):
@@ -40,7 +43,7 @@ def convert(grade):
         return 62
     if grade is "F":
         return 59
-    raise BaseException(print("成绩错误"))
+    raise ValidationError("成绩错误")
 
 
 def getStudentGrade(expected):
@@ -74,8 +77,14 @@ def getStudentGrade(expected):
 # 返回五级制中课程存在的关联关系和百分制课程关联关系
 def getStudentClassGradesRelatedRules():
     grade = getStudentGrade("80")
-    L, suppData = apriori(grade)
-    rules = generateRules(L, suppData, minConf=0.5)
+
+    try:
+        L, suppData = apriori(grade)
+        rules = generateRules(L, suppData, minConf=0.5)
+    except BaseException as E:
+        logger.error("error", E)
+        raise BaseException("关联分析时出现错误")
+
     max_rules = getMaxRelated(rules)
     course_rules = []
     for item in max_rules:
@@ -99,7 +108,7 @@ def mul(a, b):
 # 计算皮尔逊相关系数 因果是相关 相关不一定是因果 相关系数表示因果关系的程度  不是相关关系可以使用关联分析
 def getPcc(x, y):
     if len(x) is not len(y):
-        raise BaseException(print("两组数据集大小不一致"))
+        raise ValidationError("两组数据集大小不一致")
     n = len(x)
     # 求和
     sum1 = sum(x)
@@ -111,4 +120,4 @@ def getPcc(x, y):
     sum_yy = sum([pow(j, 2) for j in y])
     num = sum_xy - (float(sum1) * float(sum2) / n)
     den = sqrt((sum_xx - float(sum1 ** 2) / n) * (sum_yy - float(sum2 ** 2) / n))
-    return num/den
+    return num / den

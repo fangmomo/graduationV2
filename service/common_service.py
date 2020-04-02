@@ -1,3 +1,6 @@
+from django.http import Http404
+from rest_framework.exceptions import ValidationError
+
 from app.dao import *
 
 
@@ -61,7 +64,7 @@ def grade_compare_by_teacher(course_id, teacher_id1, teacher_id2, stu_level):
     course_teacher1 = getCourseTeacher(course_id, teacher_id1)
     course_teacher2 = getCourseTeacher(course_id, teacher_id2)
     if course_teacher1 is None or course_teacher2 is None:
-        raise BaseException(print("这个课程没有这个给老师的课程"))
+        raise ValidationError("这个课程没有这个给老师的课程")
 
     grade1 = getGradeByCourseIdAndTeacherIdAndStuLevel(course_id, teacher_id1, stu_level)
     grade_list1 = []
