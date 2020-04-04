@@ -78,3 +78,6 @@ def grade_compare_by_teacher(course_id, teacher_id1, teacher_id2, stu_level):
     grade_dict = get_grade_dict(course["score_method"], grade_list_dict)
     res = {"method": course["score_method"], "grade": grade_dict}
     return res
+
+
+
