@@ -75,3 +75,13 @@ def getGradeByCourseIdAndTeacherIdAndStuLevel(course_id, teacher_id, stu_level):
               stu_level)
     res = db.select(sql)
     return res
+
+
+def get_data_schemas():
+    """
+    :return: 返回所有的可以规则化输入的信息
+    """
+    db = DBHelper()
+    sql = "select * from data_schema"
+    res = db.select(sql)
+    return res

@@ -28,3 +28,10 @@ def grade_compare_teacher(request):
     student_level = dict_data.get("student_level")
     result = grade_compare_by_teacher(course_id, teacher_id1, teacher_id2, student_level)
     return HttpResponse(json.dumps(result, ensure_ascii=False), content_type="application/json,charset=utf-8")
+
+
+def get_data_schemas(request):
+    print(12345)
+    data_list = get_data_schema_list()
+    print(data_list)
+    return HttpResponse(json.dumps(data_list, ensure_ascii=False), content_type="application/json,charset=utf-8")
