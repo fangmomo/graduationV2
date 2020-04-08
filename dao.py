@@ -85,3 +85,14 @@ def get_data_schemas():
     sql = "select * from data_schema"
     res = db.select(sql)
     return res
+
+
+def getDataByTableName(name):
+    """
+    :param name: 表名
+    :return: 表内所有数据
+    """
+    db = DBHelper()
+    sql = "select * from %s" % name
+    res = db.select(sql)
+    return res

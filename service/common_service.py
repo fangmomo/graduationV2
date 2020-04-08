@@ -82,3 +82,13 @@ def grade_compare_by_teacher(course_id, teacher_id1, teacher_id2, stu_level):
 
 def get_data_schema_list():
     return get_data_schemas()
+
+
+def getDataByName(tableName):
+    keys = ['id', 'password', 'create_time', 'update_time', 'createTime', 'updateTime']
+    res = getDataByTableName(tableName)
+    for item in res:
+        for k in list(item.keys()):
+            if k in keys:
+                item.pop(k)
+    return res

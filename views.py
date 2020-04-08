@@ -1,7 +1,7 @@
 import json
 
 from django.http import HttpResponse
-
+from app.DateEncoder import DateEncoder
 from app.service.common_service import *
 
 
@@ -31,7 +31,13 @@ def grade_compare_teacher(request):
 
 
 def get_data_schemas(request):
-    print(12345)
     data_list = get_data_schema_list()
-    print(data_list)
     return HttpResponse(json.dumps(data_list, ensure_ascii=False), content_type="application/json,charset=utf-8")
+
+
+def get_data_by_name(request):
+    table_name = request.POST.get('table_name')
+    res = getDataByName(table_name)
+    print(res)
+    return HttpResponse(json.dumps(res, ensure_ascii=False, cls=DateEncoder), content_type="application/json,"
+                                                                                           "charset=utf-8")

@@ -36,7 +36,7 @@ class DBHelper:
         try:
             self.conn = pymysql.connect(host=self.host, user=self.user, password=self.password, port=self.port,
                                         db=self.dbname, charset=db_config['charset'])  # 创建连接
-            self.cur = self.conn.cursor()  # 创建游标
+            self.cur = self.conn.cursor(pymysql.cursors.DictCursor)  # 创建游标
         except BaseException as e:
             logger.error(e)
             logger.error("connectDatabase failed")
