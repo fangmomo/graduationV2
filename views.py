@@ -41,3 +41,8 @@ def get_data_by_name(request):
     print(res)
     return HttpResponse(json.dumps(res, ensure_ascii=False, cls=DateEncoder), content_type="application/json,"
                                                                                            "charset=utf-8")
+
+
+def save_data_list(request):
+    table_name = request.POST.get('table_name')
+    data_list = request.POST.get('datalist')

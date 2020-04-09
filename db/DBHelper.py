@@ -1,6 +1,7 @@
 import pymysql
 import logging
 import sys
+import json
 
 # 加入日志
 # 获取logger实例
@@ -61,7 +62,7 @@ class DBHelper:
                 self.cur.execute(sql, self.params)
                 self.conn.commit()
         except BaseException as f:
-            logger.error("error: " + f)
+            logger.error("error: " + json.dump(f))
             logger.error("execute failed: " + sql)
             logger.error("params: " + self.params)
             self.conn.rollback()
@@ -77,6 +78,8 @@ class DBHelper:
         return result
 
     def executemany(self, sql, params):
+        print(sql)
+        print(params)
         self.connectDB()
         """
         批量插入数据
@@ -89,11 +92,12 @@ class DBHelper:
             # params = [(2, 'fighter01', 'admin', 'sanpang'),
             #           (3, 'fighter02', 'admin', 'sanpang')]  # insert数据，
             self.cur.executemany(sql, params)
+            self.conn.commit()
 
         except BaseException as f:
-            logger.error("error: " + f)
+            print(f)
             logger.error("execute failed: " + sql)
-            logger.error("params: " + self.params)
+            logger.error("params: " + json.dumps(params))
             self.conn.rollback()
             self.closeDB()
         return self.cur.rowcount

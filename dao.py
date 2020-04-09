@@ -96,3 +96,31 @@ def getDataByTableName(name):
     sql = "select * from %s" % name
     res = db.select(sql)
     return res
+
+
+def saveDataByTable(cols, datalist, name):
+    """
+    :param cols:
+    :param datalist: 数据
+    :param name: 表名
+    :return: 无
+    """
+    table_col = name + '('
+    keys = '('
+    for item in cols:
+        table_col = table_col + item + ','
+        keys = keys + '%s,'
+
+    table_col = table_col[:-1] + ')'
+    keys = keys[:-1] + ')'
+    db = DBHelper()
+    sql = "insert into %s values%s " % (table_col, keys)
+    res = db.executemany(sql, datalist)
+    return res
+
+
+if __name__ == '__main__':
+    cols = ['student_number', 'student_name', 'mail', 'status']
+    datalist = [('16301147', 'xiaofang', '16301147@qq.com', '1')]
+    name = 'student'
+    saveDataByTable(cols, datalist, name)
