@@ -31,7 +31,7 @@ def queryByPara(index, para, value):
     return res
 
 
-def queryRange(index,para,start,end):
+def queryRange(index, para, start, end):
     term = {para: [start, end]}
     query = {
         "query": {
@@ -40,4 +40,3 @@ def queryRange(index,para,start,end):
     }
     res = es.query(index, query)
     return res
-

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import json
 
 from django.http import HttpResponse
@@ -38,11 +39,30 @@ def get_data_schemas(request):
 def get_data_by_name(request):
     table_name = request.POST.get('table_name')
     res = getDataByName(table_name)
-    print(res)
     return HttpResponse(json.dumps(res, ensure_ascii=False, cls=DateEncoder), content_type="application/json,"
                                                                                            "charset=utf-8")
 
 
 def save_data_list(request):
     table_name = request.POST.get('table_name')
-    data_list = request.POST.get('datalist')
+    data = request.POST.get('data')
+    data_list_json = json.loads(data)
+    data_list = []
+    for item in data_list_json:
+        data_list_item = []
+        for (k, v) in item.items():
+            data_list_item.append(v)
+        data_list.append(tuple(data_list_item))
+    print(data_list)
+    col_list = []
+    item = data_list_json[0]
+    for (k, v) in item.items():
+        col_list.append(k)
+    res = saveDataList(col_list, data_list, table_name)
+    return HttpResponse('ok')
+
+
+def get_analysis_data(request):
+    res = get_analysis_init_data()
+    result = grade_compare(41)
+    return HttpResponse('Hello, World')

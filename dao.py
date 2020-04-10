@@ -48,6 +48,21 @@ def getCourseGrade(courseId):
     return res
 
 
+def getCourseGradeLevels(courseId):
+    """
+    :param courseId: 课程id
+    :return: 该课程存在的学生级数
+    """
+    db = DBHelper()
+    sql = "select distinct student_level" \
+          "from student_course where course_id = %s" % courseId
+    res = db.select(sql)
+    levels = []
+    for item in res:
+        levels.append(item[0])
+    return levels
+
+
 def getCourseTeacher(course_id, teacher_id):
     """
     :param course_id: 课程id
@@ -116,6 +131,16 @@ def saveDataByTable(cols, datalist, name):
     db = DBHelper()
     sql = "insert into %s values%s " % (table_col, keys)
     res = db.executemany(sql, datalist)
+    return res
+
+
+def getStudentGPA():
+    """
+    :return:返回毕业学生的GPA和学生学号
+    """
+    db = DBHelper()
+    sql = "select student_number,GPA from student where status = 2"  # status=2 代表毕业
+    res = db.select(sql)
     return res
 
 

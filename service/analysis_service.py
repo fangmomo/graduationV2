@@ -2,7 +2,6 @@ from rest_framework.exceptions import ValidationError
 
 from app.analysis.apriori import *
 from app.dao import *
-from common.log import logger
 
 
 def getMaxRelated(rules):
@@ -82,7 +81,6 @@ def getStudentClassGradesRelatedRules():
         L, suppData = apriori(grade)
         rules = generateRules(L, suppData, minConf=0.5)
     except BaseException as E:
-        logger.error("error", E)
         raise BaseException("关联分析时出现错误")
 
     max_rules = getMaxRelated(rules)

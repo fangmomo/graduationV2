@@ -1,6 +1,7 @@
 from django.http import Http404
 from rest_framework.exceptions import ValidationError
 
+from app.ESDao import *
 from app.dao import *
 
 
@@ -9,28 +10,86 @@ def getStudentGrade(course_id):
     return getStuIdAndScoreByCourseId(ids)
 
 
+def get_hun_dis_key(item):
+    if item < 60:
+        return "0-59"
+    elif item < 70:
+        return "60-70"
+    elif item < 80:
+        return "70-80"
+    elif item < 90:
+        return "80-90"
+    else:
+        return "90-100"
+
+
 def grade_compare(courseId):
     course = getCourseById(courseId)
     course_grade = getCourseGrade(courseId)
-    grade_list_dict = {}
-    for item in course_grade:
-        level = item["student_level"]
-        grade = item["grade"]
-        if level not in grade_list_dict:
-            grade_list_dict[level] = [grade]
-        else:
-            grade_list_dict[level].append(grade)
-    grade_dict = get_grade_dict(course["score_method"], grade_list_dict)
-    res = {"method": course["score_method"], "grade": grade_dict}
+    course_grade_level = getCourseGradeLevels(courseId)
+    grade_dict = get_grade_dict(course["score_method"], course_grade)
+
+    # {
+    #   col:['分布','2016'，'2017'，'2018']
+    #   rows:[
+    #       {'分布':'A','2016':n,'2017':n}
+    #   ]
+    # }
+    col = ['分布']
+    for item in course_grade_level:
+        col.append(item)
+    row = []
+    for (k, v) in grade_dict.items():
+        rowItem = {'分布': k}
+        for level in course_grade:
+            if level in v:
+                rowItem[level] = v[level]
+            else:
+                rowItem[level] = 0
+        row.append(rowItem)
+    res = {'col': col, 'rows': row}
     return res
 
 
+# {a:{2016:2,2017:3}}
+def get_grade_dict(score_method, course_grade):
+    grade_list_dict = {}
+    # 1 = 5级
+    if score_method is 1:
+        for item in course_grade:
+            level = item["student_level"]
+            grade = item["grade"]
+            if grade not in grade_list_dict:
+                grade_list_dict[grade] = {}
+            else:
+                if level not in grade_list_dict[grade]:
+                    grade_list_dict[grade][level] = 0
+                else:
+                    grade_list_dict[grade][level] += 1
+    else:
+        temp = {"0-59": {}, "60-69": {}, "70-79": {}, "80-89": {}, "90-100": {}}
+        for item in course_grade:
+            level = item["student_level"]
+            grade = item["grade"]
+            key = get_hun_dis_key(grade)
+            if level not in temp[key]:
+                temp[key] = 0
+            else:
+                temp[key] += 1
+        grade_list_dict = temp
+    return grade_list_dict
+
+
+# {'2016': {'size':100, 'distribution':{'a':1,'b':2}}}
+"""
+grade_list_dict 格式 {2016：[a,b,a,c,a],2017:[a,b,c,a,b]}
 def get_grade_dict(score_method, grade_list_dict):
     grade_dict = {}
     # 1 = 5级
     if score_method is 1:
-        for (k, v) in grade_list_dict:  # 遍历每个年级的成绩列表
-            grade_dict_item = {"size": len(v)}
+        for (k, v) in grade_list_dict.items():  # 遍历每个年级的成绩列表
+            # grade_dict_item = {"size": len(v)}
+            grade_dict_item = {}
             temp = {}
             for item in v:  # 遍历指定年级成绩列表
                 if item in temp:
@@ -40,8 +99,9 @@ def get_grade_dict(score_method, grade_list_dict):
             grade_dict_item["distribution"] = temp
             grade_dict[k] = grade_dict_item
     else:
-        for (k, v) in grade_list_dict:
-            grade_dict_item = {"size": len(v), "avg": sum(v) / len(v)}
+        for (k, v) in grade_list_dict.items():
+            grade_dict_item = {}
+            # grade_dict_item = {"size": len(v), "avg": sum(v) / len(v)}
             temp = {"0-59": 0, "60-69": 0, "70-79": 0, "80-89": 0, "90-100": 0}
             for item in v:
                 if item < 60:
@@ -57,6 +117,7 @@ def get_grade_dict(score_method, grade_list_dict):
             grade_dict_item["distribution"] = temp
             grade_dict[k] = grade_dict_item
     return grade_dict
+"""
 
 
 def grade_compare_by_teacher(course_id, teacher_id1, teacher_id2, stu_level):
@@ -92,3 +153,20 @@ def getDataByName(tableName):
             if k in keys:
                 item.pop(k)
     return res
+
+
+def saveDataList(col, dataList, tableName):
+    return saveDataByTable(cols, datalist, tableName)
+
+
+# 未做
+def calGradeAndSalaryPcc():
+    stuGpaList = getStudentGPA()
+    stuSalaryList = getStudentSalary()
+    stuGpa = []
+    stuSalary = []
+
+
+def get_analysis_init_data():
+    data1 = grade_compare(41)  # 数据结构成绩分布 按年对比
+    data2 = calGradeAndSalaryPcc
