@@ -54,12 +54,12 @@ def getCourseGradeLevels(courseId):
     :return: 该课程存在的学生级数
     """
     db = DBHelper()
-    sql = "select distinct student_level" \
+    sql = "select distinct (student_level)" \
           "from student_course where course_id = %s" % courseId
     res = db.select(sql)
     levels = []
     for item in res:
-        levels.append(item[0])
+        levels.append(item['student_level'])
     return levels
 
 

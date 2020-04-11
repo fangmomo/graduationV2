@@ -10,6 +10,10 @@ class ESObject:
         res = self.es.index(index=index, body=body)
         return res
 
+    def saveById(self, index, body, index_id):
+        res = self.es.index(index=index, body=body, id=index_id)
+        return res
+
     def delete(self, index, target_id):
         res = self.es.delete(index=index, id=target_id)
         return res

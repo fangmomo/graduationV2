@@ -15,11 +15,11 @@ def get_hun_dis_key(item):
     if item < 60:
         return "0-59"
     elif item < 70:
-        return "60-70"
+        return "60-69"
     elif item < 80:
-        return "70-80"
+        return "70-79"
     elif item < 90:
-        return "80-90"
+        return "80-89"
     else:
         return "90-100"
 
@@ -42,8 +42,8 @@ def grade_compare(courseId):
     row = []
     for (k, v) in grade_dict.items():
         rowItem = {'分布': k}
-        for level in course_grade:
-            if level in v:
+        for level in course_grade_level:
+            if level in v.keys():
                 rowItem[level] = v[level]
             else:
                 rowItem[level] = 0
@@ -72,11 +72,11 @@ def get_grade_dict(score_method, course_grade):
         for item in course_grade:
             level = item["student_level"]
             grade = item["grade"]
-            key = get_hun_dis_key(grade)
-            if level not in temp[key]:
-                temp[key] = 0
+            key = get_hun_dis_key(int(grade))
+            if level not in temp[key].keys():
+                temp[key][level] = 1
             else:
-                temp[key] += 1
+                temp[key][level] += 1
         grade_list_dict = temp
     return grade_list_dict
 
@@ -164,17 +164,20 @@ def calGradeAndSalaryPcc():
     gpa = getStudentGPA()
     stuGpaList = {}  # {stu_number:gpa}
     for item in gpa:
-        stuGpaList.update(item)
+        stuId = item['student_number']
+        GPA = item['GPA']
+        stuGpaList[stuId] = GPA
     stuSalaryList = getStudentSalary()  # {stu_number:salary}
     stuGpa = []
     stuSalary = []
     col = ['GPA', 'salary']
     rows = []
     for (k, v) in stuSalaryList.items():
+        k = str(k)
         if k in stuGpaList.keys():
             gpa_value = stuGpaList[k]
-            stuGpa.append(gpa_value)
-            stuSalary.append(v)
+            stuGpa.append(float(gpa_value))
+            stuSalary.append(float(v))
             rows.append({'GPA': gpa_value, 'salary': v})
     stuGpaSalary = {'columns': col, 'rows': rows}
     pcc = getPcc(stuGpa, stuSalary)
@@ -182,8 +185,9 @@ def calGradeAndSalaryPcc():
 
 
 def get_analysis_init_data():
-    #data1 = grade_compare(41)  # 数据结构成绩分布 按年对比 {'data':{'col': col, 'rows': row},title:xxx}
-    #data2 = calGradeAndSalaryPcc()  # { data:{'col': col, 'rows': row},'pcc':xxx,title:xxx}
+    data1 = grade_compare(41)  # 数据结构成绩分布 按年对比 {'data':{'col': col, 'rows': row},title:xxx}
+    data2 = calGradeAndSalaryPcc()  # { data:{'col': col, 'rows': row},'pcc':xxx,title:xxx}
+    """
     data2 = {
         'data':
             {
@@ -206,4 +210,8 @@ def get_analysis_init_data():
         },
         'title': '学生数据结构成绩历年分布情况'
     }
+    """
+    print(data1)
+    print(data2)
     return [data1, data2]
+
