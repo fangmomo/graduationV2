@@ -3,6 +3,7 @@ from rest_framework.exceptions import ValidationError
 
 from app.ESDao import *
 from app.dao import *
+from app.service.analysis_service import getPcc
 
 
 def getStudentGrade(course_id):
@@ -47,8 +48,8 @@ def grade_compare(courseId):
             else:
                 rowItem[level] = 0
         row.append(rowItem)
-    res = {'col': col, 'rows': row}
-    return res
+    res = {'columns': col, 'rows': row}
+    return {'data': res, 'title': '学生数据结构成绩历年分布情况'}
 
 
 # {a:{2016:2,2017:3}}
@@ -159,14 +160,50 @@ def saveDataList(col, dataList, tableName):
     return saveDataByTable(cols, datalist, tableName)
 
 
-# 未做
 def calGradeAndSalaryPcc():
-    stuGpaList = getStudentGPA()
-    stuSalaryList = getStudentSalary()
+    gpa = getStudentGPA()
+    stuGpaList = {}  # {stu_number:gpa}
+    for item in gpa:
+        stuGpaList.update(item)
+    stuSalaryList = getStudentSalary()  # {stu_number:salary}
     stuGpa = []
     stuSalary = []
+    col = ['GPA', 'salary']
+    rows = []
+    for (k, v) in stuSalaryList.items():
+        if k in stuGpaList.keys():
+            gpa_value = stuGpaList[k]
+            stuGpa.append(gpa_value)
+            stuSalary.append(v)
+            rows.append({'GPA': gpa_value, 'salary': v})
+    stuGpaSalary = {'columns': col, 'rows': rows}
+    pcc = getPcc(stuGpa, stuSalary)
+    return {'data': stuGpaSalary, 'pcc': pcc, 'title': '学生成绩GPA与毕业后薪水相关分析'}
 
 
 def get_analysis_init_data():
-    data1 = grade_compare(41)  # 数据结构成绩分布 按年对比
-    data2 = calGradeAndSalaryPcc
+    #data1 = grade_compare(41)  # 数据结构成绩分布 按年对比 {'data':{'col': col, 'rows': row},title:xxx}
+    #data2 = calGradeAndSalaryPcc()  # { data:{'col': col, 'rows': row},'pcc':xxx,title:xxx}
+    data2 = {
+        'data':
+            {
+                'columns': ['GPA', 'salary'],
+                'rows': [
+                    {'GPA': '3', 'salary': 8000},
+                    {'GPA': '4', 'salary': 9000}
+                ]
+            },
+        'title': '学生成绩GPA与毕业后薪水相关分析',
+        'pcc': 0.123
+    }
+    data1 = {
+        'data': {
+            'columns': ['分布', '2016', '2017'],
+            'rows': [
+                {'分布': 'A', '2016': 16, '2017': 23},
+                {'分布': 'B', '2016': 2, '2017': 13}
+            ]
+        },
+        'title': '学生数据结构成绩历年分布情况'
+    }
+    return [data1, data2]
