@@ -34,15 +34,24 @@ def query(index, query):
     return es.query(index, query)
 
 
-def queryByPara(index, para, value):
+def termQueryByPara(index, para, value):
     term = {para: value}
-    query = {
+    term_query = {
         "query": {
             "term": term
         }
     }
-    res = es.query(index, query)
-    return res
+    return es.query(index, term_query)
+
+
+def matchQueryByPara(index, para, value):
+    match = {para: value}
+    match_query = {
+        "query": {
+            "match": match
+        }
+    }
+    return es.query(index, match_query)
 
 
 def queryByParas(index, term):
@@ -70,8 +79,14 @@ def delete(index, target_id):
     es.delete(index, target_id)
 
 
+def create_index(index_name):
+    es.create_index(index_name)
+
+
 """
 if __name__ == '__main__':
+    
+    create_index('student_info')
     index = "student_info"
     body = {
         'student_number': '16301147',
@@ -88,4 +103,8 @@ if __name__ == '__main__':
     }
     id = '16301146'
     saveESBodyById(index, id, body)
-"""
+    
+
+    res = matchQueryByPara('student_info','status','已毕业')
+    print(res)
+    """

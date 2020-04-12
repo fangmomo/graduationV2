@@ -157,7 +157,7 @@ def getDataByName(tableName):
 
 
 def saveDataList(col, dataList, tableName):
-    return saveDataByTable(cols, datalist, tableName)
+    return saveDataByTable(col, dataList, tableName)
 
 
 def calGradeAndSalaryPcc():

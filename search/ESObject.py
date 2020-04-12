@@ -26,9 +26,28 @@ class ESObject:
         res = self.es.search(index=index, body=query)
         return res
 
-    def getSource(self,index,target_id):
-        res = self.es.get_source(index=index,id=target_id)
+    def getSource(self, index, target_id):
+        res = self.es.get_source(index=index, id=target_id)
         return res
+
+    def create_index(self, index_name):
+        index_mapping = {
+            "settings": {"index.analysis.analyzer.default.type": "ik_max_word"},
+            "mappings": {
+                "properties": {
+                    "status": {
+                        "type": "text",
+                        "index": True,
+                        "analyzer": "ik_max_word",
+                        "search_analyzer": "ik_max_word"
+                    }
+                }
+            }
+        }
+        if self.es.indices.exists(index=index_name) is not True:
+            res = self.es.indices.create(index=index_name, body=index_mapping)
+            print('1', res)
+
 
 """
 if __name__ == '__main__':

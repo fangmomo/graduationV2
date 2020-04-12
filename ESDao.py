@@ -5,21 +5,9 @@ def getStudentSalary():
     key = "status"
     value = "已毕业"
     index = "student_info"
-    must = {
-        'term': {'status': '已'},
-        'term': {'status': '毕'},
-        'term': {'status': '业'}
-    }
-    dis = {
-        'query': {
-            'bool': {
-                'must': must
-            }
-        }
-    }
-    res = query(index, dis)
+    match_res = matchQueryByPara(index, key, value)
     stuSalary = {}
-    for hit in res['hits']['hits']:
+    for hit in match_res['hits']['hits']:
         stuId = hit['_source']['student_number']
         salary = hit['_source']['salary']
         # item = {'student_number': hit['_source']['student_number'], 'salary': hit['_source']['salary']}
