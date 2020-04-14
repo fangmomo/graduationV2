@@ -65,3 +65,9 @@ def save_data_list(request):
 def get_analysis_data(request):
     res = get_analysis_init_data()
     return HttpResponse(json.dumps(res, ensure_ascii=False), content_type="application/json,charset=utf-8")
+
+
+def get_studentSource_data(request):
+    res = get_student_source_data()
+    print(res)
+    return HttpResponse(json.dumps(res, ensure_ascii=False), content_type="application/json,charset=utf-8")

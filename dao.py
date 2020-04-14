@@ -144,6 +144,34 @@ def getStudentGPA():
     return res
 
 
+def getStudentSourceInfo(year_range):
+    """
+    :return:  返回学生生源信息
+    """
+    year_range_str = '('
+    for item in year_range:
+        year_range_str = year_range_str + str(item) + ','
+    year_range_str = year_range_str[:-1] + ')'
+    db = DBHelper()
+    sql = "select student_level, hometown from student where student_level in %s" % year_range_str
+    res = db.select(sql)
+    return res
+
+
+def getStudentSourceScoreInfo(year_range):
+    """
+    :return:  返回学生生源成绩信息
+    """
+    year_range_str = '('
+    for item in year_range:
+        year_range_str = year_range_str + str(item) + ','
+    year_range_str = year_range_str[:-1] + ')'
+    db = DBHelper()
+    sql = "select count(score_difference) as stu_count, avg(score_difference) as diff from student where student_level in %s group by student_level" % year_range_str
+    res = db.select(sql)
+    return res
+
+
 if __name__ == '__main__':
     cols = ['student_number', 'student_name', 'mail', 'status']
     datalist = [('16301147', 'xiaofang', '16301147@qq.com', '1')]

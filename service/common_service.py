@@ -215,3 +215,31 @@ def get_analysis_init_data():
     print(data2)
     return [data1, data2]
 
+
+def get_student_source_data():
+    columns = ['2016', '2017', '2018', '2019']
+    row = []
+    studentSourceData = {'columns': columns}
+    source_info_list = getStudentSourceInfo(columns)
+    data_dict = {}
+    for item in source_info_list:
+        hometown = item['hometown']
+        stuLevel = item['student_level']
+        if hometown not in data_dict.keys():
+            data_dict[hometown] = {stuLevel: 1}
+        else:
+            if stuLevel not in data_dict[hometown].keys():
+                data_dict[hometown][stuLevel] = 1
+            else:
+                data_dict[hometown][stuLevel] += 1
+    for (k, v) in data_dict.items():
+        row_item = {'分布': k}
+        for key in columns:
+            if key in v.keys():
+                row_item[key] = v[key]
+            else:
+                row_item[key] = 1
+        row.append(row_item)
+    studentSourceData['row'] = row
+    studentSourceScoreData = getStudentSourceScoreInfo(columns)
+    return {'chartData': studentSourceData, 'yearData': studentSourceScoreData}
