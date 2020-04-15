@@ -154,6 +154,7 @@ def getStudentSourceInfo(year_range):
     year_range_str = year_range_str[:-1] + ')'
     db = DBHelper()
     sql = "select student_level, hometown from student where student_level in %s" % year_range_str
+    print(sql)
     res = db.select(sql)
     return res
 
@@ -167,7 +168,7 @@ def getStudentSourceScoreInfo(year_range):
         year_range_str = year_range_str + str(item) + ','
     year_range_str = year_range_str[:-1] + ')'
     db = DBHelper()
-    sql = "select count(score_difference) as stu_count, avg(score_difference) as diff from student where student_level in %s group by student_level" % year_range_str
+    sql = "select student_level, count(score_difference) as stu_count, avg(score_difference) as diff from student where student_level in %s group by student_level" % year_range_str
     res = db.select(sql)
     return res
 

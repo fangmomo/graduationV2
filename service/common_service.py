@@ -224,12 +224,12 @@ def get_student_source_data():
     data_dict = {}
     for item in source_info_list:
         hometown = item['hometown']
-        stuLevel = item['student_level']
+        stuLevel = str(item['student_level'])
         if hometown not in data_dict.keys():
             data_dict[hometown] = {stuLevel: 1}
         else:
             if stuLevel not in data_dict[hometown].keys():
-                data_dict[hometown][stuLevel] = 1
+                data_dict[hometown][stuLevel] = 0
             else:
                 data_dict[hometown][stuLevel] += 1
     for (k, v) in data_dict.items():
@@ -238,8 +238,10 @@ def get_student_source_data():
             if key in v.keys():
                 row_item[key] = v[key]
             else:
-                row_item[key] = 1
+                row_item[key] = 0
         row.append(row_item)
-    studentSourceData['row'] = row
+    studentSourceData['rows'] = row
     studentSourceScoreData = getStudentSourceScoreInfo(columns)
+    columns.insert(0, '分布')
     return {'chartData': studentSourceData, 'yearData': studentSourceScoreData}
+

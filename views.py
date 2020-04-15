@@ -69,5 +69,4 @@ def get_analysis_data(request):
 
 def get_studentSource_data(request):
     res = get_student_source_data()
-    print(res)
-    return HttpResponse(json.dumps(res, ensure_ascii=False), content_type="application/json,charset=utf-8")
+    return HttpResponse(json.dumps(res, ensure_ascii=False, cls=DateEncoder), content_type="application/json,charset=utf-8")
