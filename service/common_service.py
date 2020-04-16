@@ -245,3 +245,6 @@ def get_student_source_data():
     columns.insert(0, '分布')
     return {'chartData': studentSourceData, 'yearData': studentSourceScoreData}
 
+
+def esByIndexAndPara(index, key, value):
+    return queryByIndexAndKey(index, key, value)
