@@ -246,8 +246,8 @@ def get_student_source_data():
     return {'chartData': studentSourceData, 'yearData': studentSourceScoreData}
 
 
-def esByIndexAndPara(index, key, value):
-    query_res = queryByIndexAndKey(index, key, value)
+def multi_Match(index, keys, value):
+    query_res = multiMatch(index, keys, value)
     res = []
     for item in query_res:
         res.append(item['_source'])

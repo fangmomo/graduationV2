@@ -20,6 +20,7 @@ def queryByIndexAndKey(index, key, value):
     return match_res['hits']['hits']
 
 
+# 暂时没用
 def queryByIndexAndKeyAndHighLight(index, key, value):
     match = {key: value}
     match_query = {
@@ -34,4 +35,10 @@ def queryByIndexAndKeyAndHighLight(index, key, value):
     }
     match_res = query(index, match_query)
     return match_res['hits']['hits']
+
+
+def multiMatch(index, keys, value):
+    matchRes = multi_Match_Query(index, keys, value)
+    return matchRes['hits']['hits']
+
 

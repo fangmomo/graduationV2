@@ -83,33 +83,54 @@ def create_index(index_name):
     es.create_index(index_name)
 
 
+def multi_Match_Query(index, keys, value):
+    multi_query = {
+        'query': {
+            'multi_match': {
+                'query': value,
+                'type': 'best_fields',
+                'fields': keys,
+                'tie_breaker': 0.3,
+                'minimum_should_match': '30%'
+            }
+        }
+    }
+    return query(index, multi_query)
+
+
 """
 if __name__ == '__main__':
+    
     edu = {
-        '本科': '北京交通大学软件工程',
-        '硕士': '北京交通大学软件工程',
-        '博士': '北京交通大学计算机科学与技术'}
+        '本科': '红果园大学软件工程',
+        '硕士': '北京邮电大学大学软件工程',
+        '博士': '清华计算机科学与技术'}
     create_index('teacher_info')
     index = "teacher_info"
     body = {
-        'name': '方赢',
+        'name': '张三',
         'education': str(edu),
-        'info': '曾留学于美国xxxx大学，参与了xxx项目'
+        'info': '曾参加了清华大学实训项目，参与了北京理工大学人工只能实训项目'
     }
-    id = '16301147'
+    id = '16301148'
     saveESBodyById(index, id, body)
     edu = {
-        '本科': '北京交通大学软件工程',
-        '硕士': '北京交通大学软件工程',
-        '博士': '北京交通大学计算机科学与技术'
+        '本科': '中国人民大学软件工程',
+        '硕士': '北京大学人工智能',
+        '博士': '北京理工大学自然语言处理'
     }
     body = {
-        'name': '方x',
+        'name': '李四',
         'education': str(edu),
-        'info': '曾留学于英国xxxx大学，设计了xxx系统'
+        'info': '英国海外学者，参与北京交通大学的系统开发，清华大学自学社成员'
     }
-    id = '16301146'
+    id = '16301150'
     saveESBodyById(index, id, body)
-    # res = matchQueryByPara('student_info','status','已毕业')
-    # print(res)
-"""
+    
+    index = 'teacher_info'
+    keys = ['education', 'info']
+    value = '北理工'
+    res = multiMatch(index, keys, value)
+    print(res)
+    """
+
