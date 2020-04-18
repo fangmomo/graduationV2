@@ -85,26 +85,31 @@ def create_index(index_name):
 
 """
 if __name__ == '__main__':
-    
-    create_index('student_info')
-    index = "student_info"
+    edu = {
+        '本科': '北京交通大学软件工程',
+        '硕士': '北京交通大学软件工程',
+        '博士': '北京交通大学计算机科学与技术'}
+    create_index('teacher_info')
+    index = "teacher_info"
     body = {
-        'student_number': '16301147',
-        'salary': 8000,
-        'status': '已毕业'
+        'name': '方赢',
+        'education': str(edu),
+        'info': '曾留学于美国xxxx大学，参与了xxx项目'
     }
     id = '16301147'
     saveESBodyById(index, id, body)
-    index = "student_info"
+    edu = {
+        '本科': '北京交通大学软件工程',
+        '硕士': '北京交通大学软件工程',
+        '博士': '北京交通大学计算机科学与技术'
+    }
     body = {
-        'student_number': '16301146',
-        'salary': 9000,
-        'status': '已毕业'
+        'name': '方x',
+        'education': str(edu),
+        'info': '曾留学于英国xxxx大学，设计了xxx系统'
     }
     id = '16301146'
     saveESBodyById(index, id, body)
-    
-
-    res = matchQueryByPara('student_info','status','已毕业')
-    print(res)
-    """
+    # res = matchQueryByPara('student_info','status','已毕业')
+    # print(res)
+"""

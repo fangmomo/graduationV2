@@ -75,8 +75,9 @@ def get_studentSource_data(request):
 
 def get_by_index_and_para(request):
     index_name = request.POST.get('index')
-    key = request.POST.get('key')
+    key = 'education'
     value = request.POST.get('value')
     res = esByIndexAndPara(index_name, key, value)
+    print(res)
     return HttpResponse(json.dumps(res, ensure_ascii=False, cls=DateEncoder), content_type="application/json,"
                                                                                            "charset=utf-8")

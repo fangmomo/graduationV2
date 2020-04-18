@@ -19,3 +19,19 @@ def queryByIndexAndKey(index, key, value):
     match_res = matchQueryByPara(index, key, value)
     return match_res['hits']['hits']
 
+
+def queryByIndexAndKeyAndHighLight(index, key, value):
+    match = {key: value}
+    match_query = {
+        "query": {
+            "match": match
+        },
+        "highlight": {
+            "fields": {
+                key: {},
+            }
+        }
+    }
+    match_res = query(index, match_query)
+    return match_res['hits']['hits']
+
