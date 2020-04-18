@@ -247,4 +247,8 @@ def get_student_source_data():
 
 
 def esByIndexAndPara(index, key, value):
-    return queryByIndexAndKey(index, key, value)
+    query_res = queryByIndexAndKey(index, key, value)
+    res = []
+    for item in query_res:
+        res.append(item['_source'])
+    return res
