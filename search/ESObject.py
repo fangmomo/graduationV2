@@ -48,6 +48,9 @@ class ESObject:
             res = self.es.indices.create(index=index_name, body=index_mapping)
             print('1', res)
 
+    def count(self, index, query):
+        res = self.es.count(index,query)
+        return res
 
 """
 if __name__ == '__main__':

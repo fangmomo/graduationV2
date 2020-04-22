@@ -54,3 +54,26 @@ def saveTeacherEvaluation(index, value_dict):
         'reason': value_dict.get('reason')
     }
     return saveESBody(index, body)
+
+
+def getSingleTeacherEvaluation(value):
+    index = 'teacher_evaluation'
+    key = 'teacher'
+    return termQueryByPara(index, key, value)['hits']['hits']
+
+
+def getTeacherEvaluationGradeDistributed():
+    grades = ['优', '良', '中', '一般', '差']
+    res = {}
+    for item in grades:
+        grade_query = {
+            "query": {
+                "match": {
+                    "grade": item
+                }
+            }
+        }
+        res_item = count('teacher_evaluation', grade_query)
+        print(res_item)
+        res[item] = res_item['count']
+    return res

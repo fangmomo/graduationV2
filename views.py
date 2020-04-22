@@ -90,3 +90,16 @@ def save_teacher_evaluation(request):
     return HttpResponse(json.dumps(res, ensure_ascii=False, cls=DateEncoder), content_type="application/json,"
                                                                                            "charset=utf-8")
 
+
+def get_single_teacher_evaluation(request):
+    name = request.POST.get('teacher')
+    res = single_teacher_evaluation(name)
+    print(res)
+    return HttpResponse(json.dumps(res, ensure_ascii=False, cls=DateEncoder), content_type="application/json,"
+                                                                                           "charset=utf-8")
+
+
+def get_Teacher_Evaluation_Grade_Distributed(request):
+    res = teacherEvaluationGradeDistributed()
+    return HttpResponse(json.dumps(res, ensure_ascii=False, cls=DateEncoder), content_type="application/json,"
+                                                                                           "charset=utf-8")

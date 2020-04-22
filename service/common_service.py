@@ -252,3 +252,24 @@ def multi_Match(index, keys, value):
     for item in query_res:
         res.append(item['_source'])
     return res
+
+
+def single_teacher_evaluation(name):
+    res = getSingleTeacherEvaluation(name)
+    print(res)
+    columns = ['course', 'score']
+    rows = []
+    for item in res:
+        row_item = {'course': item['_source']['course'], 'score': item['_source']['score']}
+        rows.append(row_item)
+    return {'columns': columns, 'rows': rows}
+
+
+def teacherEvaluationGradeDistributed():
+    res = getTeacherEvaluationGradeDistributed()
+    columns = ['grade', 'count']
+    rows = []
+    for (k, v) in res.items():
+        row_item = {'grade': k, 'count': v}
+        rows.append(row_item)
+    return {'columns': columns, 'rows': rows}

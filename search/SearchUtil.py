@@ -98,6 +98,10 @@ def multi_Match_Query(index, keys, value):
     return query(index, multi_query)
 
 
+def count(index, count_query):
+    return es.count(index,count_query)
+
+
 """
 if __name__ == '__main__':
     
