@@ -42,3 +42,15 @@ def multiMatch(index, keys, value):
     return matchRes['hits']['hits']
 
 
+def saveTeacherEvaluation(index, value_dict):
+    body = {
+        'year': value_dict.get('year'),
+        'department': value_dict.get('department'),
+        'major': value_dict.get('major'),
+        'course': value_dict.get('course'),
+        'teacher': value_dict.get('teacher'),
+        'grade': value_dict.get('grade'),
+        'score': value_dict.get('score'),
+        'reason': value_dict.get('reason')
+    }
+    return saveESBody(index, body)

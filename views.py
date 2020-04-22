@@ -80,3 +80,13 @@ def get_by_index_and_para(request):
     res = multi_Match(index_name, key, value)
     return HttpResponse(json.dumps(res, ensure_ascii=False, cls=DateEncoder), content_type="application/json,"
                                                                                            "charset=utf-8")
+
+
+def save_teacher_evaluation(request):
+    index_name = 'teacher_evaluation'
+    teacher_evaluation_dict = request.POST
+    res = saveTeacherEvaluation(index_name, teacher_evaluation_dict)
+    print(res)
+    return HttpResponse(json.dumps(res, ensure_ascii=False, cls=DateEncoder), content_type="application/json,"
+                                                                                           "charset=utf-8")
+
