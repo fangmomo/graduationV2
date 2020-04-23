@@ -83,7 +83,7 @@ def get_by_index_and_para(request):
 
 
 def save_teacher_evaluation(request):
-    index_name = 'teacher_evaluation'
+    index_name = 'course_evaluation'
     teacher_evaluation_dict = request.POST
     res = saveTeacherEvaluation(index_name, teacher_evaluation_dict)
     print(res)
@@ -101,5 +101,11 @@ def get_single_teacher_evaluation(request):
 
 def get_Teacher_Evaluation_Grade_Distributed(request):
     res = teacherEvaluationGradeDistributed()
+    return HttpResponse(json.dumps(res, ensure_ascii=False, cls=DateEncoder), content_type="application/json,"
+                                                                                           "charset=utf-8")
+
+
+def get_Teachers_Evaluation_Avg_Scores(request):
+    res = teachersEvaluationAvgScore()
     return HttpResponse(json.dumps(res, ensure_ascii=False, cls=DateEncoder), content_type="application/json,"
                                                                                            "charset=utf-8")

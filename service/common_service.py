@@ -266,10 +266,21 @@ def single_teacher_evaluation(name):
 
 
 def teacherEvaluationGradeDistributed():
+    grades = ['优', '良', '中', '一般', '差']
     res = getTeacherEvaluationGradeDistributed()
     columns = ['grade', 'count']
     rows = []
-    for (k, v) in res.items():
-        row_item = {'grade': k, 'count': v}
+    for item in res:
+        row_item = {'grade': item['key'], 'count': item['doc_count']}
+        rows.append(row_item)
+    return {'columns': columns, 'rows': rows}
+
+
+def teachersEvaluationAvgScore():
+    res = getTeachersEvaluationAvgScore()
+    columns = ['teacher', 'score']
+    rows = []
+    for item in res:
+        row_item = {'teacher': item['key'], 'score': item['avg_price']['value']}
         rows.append(row_item)
     return {'columns': columns, 'rows': rows}

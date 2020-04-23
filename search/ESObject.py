@@ -49,22 +49,27 @@ class ESObject:
             print('1', res)
 
     def count(self, index, query):
-        res = self.es.count(index,query)
+        res = self.es.count(index, query)
         return res
+
+    def create_index(self, indexName, indexMapping):
+        res = self.es.indices.create(index=indexName, body=indexMapping)
+        print('1', res)
 
 """
 if __name__ == '__main__':
     es = ESObject()
-    index = "test"
-    body = {"doc": {"age": 37, "country": "china"}}
-    query = {
-        "query": {
-            "match_all": {}
+    index_mapping = {
+        "settings": {"index.analysis.analyzer.default.type": "ik_max_word"},
+        "mappings": {
+            "properties": {
+                "score": {
+                    "type": "float",
+                    "index": True
+                }
+            }
         }
     }
-    # res = es.query(index,query)
-    target_id = "ieU5Q3EB_R2LEtic6y9Q"
-    # res = es.update(index,target_id, body)
-    res = es.getSource(index="test", target_id=target_id)
-    print(res)
-    """
+    index_name = 'course_evaluation'
+    es.create_index(index_name, index_mapping)
+"""

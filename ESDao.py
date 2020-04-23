@@ -63,17 +63,38 @@ def getSingleTeacherEvaluation(value):
 
 
 def getTeacherEvaluationGradeDistributed():
-    grades = ['优', '良', '中', '一般', '差']
-    res = {}
-    for item in grades:
-        grade_query = {
-            "query": {
-                "match": {
-                    "grade": item
+    grade_query = {
+            "size": 0,
+            "aggs": {
+                "count": {
+                    "terms": {
+                        "field": "grade.keyword"
+                    }
+                }
+            }
+    }
+    res = query('course_evaluation', grade_query)
+    return res['aggregations']['count']['buckets']
+
+
+def getTeachersEvaluationAvgScore():
+    avg_query = {
+        "size": 0,
+        "aggs": {
+            "scores": {
+                "terms": {
+                    "field": "teacher.keyword"
+                },
+                "aggs": {
+                    "avg_price": {
+                        "avg": {
+                            "field": "score"
+                        }
+                    }
                 }
             }
         }
-        res_item = count('teacher_evaluation', grade_query)
-        print(res_item)
-        res[item] = res_item['count']
-    return res
+    }
+    res = query('course_evaluation', avg_query)
+    return res['aggregations']['scores']['buckets']
+
