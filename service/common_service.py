@@ -284,3 +284,7 @@ def teachersEvaluationAvgScore():
         row_item = {'teacher': item['key'], 'score': item['avg_price']['value']}
         rows.append(row_item)
     return {'columns': columns, 'rows': rows}
+
+
+def teacherList():
+    return getTeacherList()

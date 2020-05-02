@@ -173,8 +173,21 @@ def getStudentSourceScoreInfo(year_range):
     return res
 
 
+def getTeacherList():
+    """
+    :return:  返回老师列表
+    """
+    sql = "select teacher_name from teacher where status = 1"
+    db = DBHelper()
+    res = db.select(sql)
+    teacherNames = []
+    for item in res:
+        teacherNames.append(item['teacher_name'])
+    return teacherNames
+
+
+"""
 if __name__ == '__main__':
-    cols = ['student_number', 'student_name', 'mail', 'status']
-    datalist = [('16301147', 'xiaofang', '16301147@qq.com', '1')]
-    name = 'student'
-    saveDataByTable(cols, datalist, name)
+    res = getTeacherList()
+    print(res)
+"""

@@ -57,9 +57,9 @@ def saveTeacherEvaluation(index, value_dict):
 
 
 def getSingleTeacherEvaluation(value):
-    index = 'teacher_evaluation'
+    index = 'course_evaluation'
     key = 'teacher'
-    return termQueryByPara(index, key, value)['hits']['hits']
+    return matchQueryByPara(index, key, value)['hits']['hits']
 
 
 def getTeacherEvaluationGradeDistributed():

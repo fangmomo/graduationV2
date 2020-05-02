@@ -109,3 +109,9 @@ def get_Teachers_Evaluation_Avg_Scores(request):
     res = teachersEvaluationAvgScore()
     return HttpResponse(json.dumps(res, ensure_ascii=False, cls=DateEncoder), content_type="application/json,"
                                                                                            "charset=utf-8")
+
+
+def get_teacher_list(request):
+    res = teacherList()
+    return HttpResponse(json.dumps(res, ensure_ascii=False, cls=DateEncoder), content_type="application/json,"
+                                                                                           "charset=utf-8")
