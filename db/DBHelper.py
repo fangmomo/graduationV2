@@ -59,7 +59,7 @@ class DBHelper:
         try:
             if self.conn and self.cur:
                 # 正常逻辑，执行sql，提交操作
-                self.cur.execute(sql, self.params)
+                self.cur.execute(sql)
                 self.conn.commit()
         except BaseException as f:
             logger.error("error: " + json.dump(f))

@@ -1,8 +1,7 @@
-from django.http import Http404
 from rest_framework.exceptions import ValidationError
 
-from app.ESDao import *
-from app.dao import *
+from app.dao.ESDao import *
+from app.dao.dao import *
 from app.service.analysis_service import getPcc
 
 
@@ -147,13 +146,21 @@ def get_data_schema_list():
 
 
 def getDataByName(tableName):
-    keys = ['id', 'password', 'create_time', 'update_time', 'createTime', 'updateTime']
+    keys = ['password', 'create_time', 'update_time', 'createTime', 'updateTime']
     res = getDataByTableName(tableName)
     for item in res:
         for k in list(item.keys()):
             if k in keys:
                 item.pop(k)
     return res
+
+
+def updateByIdAndTableName(tableName, data):
+    col_list = []
+    value_list = []
+    data_id = data['id']
+    data.pop('id')
+    updateByTableName(tableName, data_id, data)
 
 
 def saveDataList(col, dataList, tableName):

@@ -43,6 +43,13 @@ def get_data_by_name(request):
                                                                                            "charset=utf-8")
 
 
+def update_date(request):
+    table_name = request.POST.get('table_name')
+    data = eval(request.POST.get('data'))
+    updateByIdAndTableName(table_name, data)
+    return HttpResponse('ok')
+
+
 def save_data_list(request):
     table_name = request.POST.get('table_name')
     data = request.POST.get('data')
@@ -78,6 +85,7 @@ def get_by_index_and_para(request):
     key = ['education', 'info']
     value = request.POST.get('value')
     res = multi_Match(index_name, key, value)
+    print(res)
     return HttpResponse(json.dumps(res, ensure_ascii=False, cls=DateEncoder), content_type="application/json,"
                                                                                            "charset=utf-8")
 

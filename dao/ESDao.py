@@ -98,3 +98,16 @@ def getTeachersEvaluationAvgScore():
     res = query('course_evaluation', avg_query)
     return res['aggregations']['scores']['buckets']
 
+
+def getTeacherEvaLowGradeList():
+    eva_query = {
+        "query": {
+            "range": {
+                'score': {
+                    "lt": 8.5
+                }
+            }
+        }
+    }
+    res = query('course_evaluation', eva_query)
+    return res['hits']['hits']

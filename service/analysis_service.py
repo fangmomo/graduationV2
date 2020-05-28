@@ -1,7 +1,8 @@
 from rest_framework.exceptions import ValidationError
 
 from app.analysis.apriori import *
-from app.dao import *
+from app.dao.ESDao import *
+from app.dao.dao import *
 
 
 def getMaxRelated(rules):
@@ -119,3 +120,96 @@ def getPcc(x, y):
     num = sum_xy - (float(sum1) * float(sum2) / n)
     den = sqrt((sum_xx - float(sum1 ** 2) / n) * (sum_yy - float(sum2 ** 2) / n))
     return num / den
+
+
+def teacherEvaLowGradeList():
+    lowList = getTeacherEvaLowGradeList()
+    data = []
+    for item in lowList:
+        data.append(item['_source'])
+    return data
+
+
+def analysisGraduationPointAll(stu_level):
+    """ 整个学院的毕业要求指标点统计分析
+    :return:
+    """
+    result = []
+    # 获取所有的毕业要求
+    requirements = getGraduationRequirementList()
+    for target in requirements:
+        result_item = {"desc": target['name']}
+        target_id = target['id']
+        point_ids = getGraduationPoints(target_id)
+        target_results = getStudentTargetResultsById(stu_level, point_ids)
+        point_infos = []
+        target_avg = 0
+        for target_item in target_results:
+            desc = getGraduationPointInfo(target_item['id'])['description']
+            complete_percent = target_item['percent']
+            target_avg += complete_percent
+            temp = {'id': target_item['id'], 'desc': desc, 'value': complete_percent}
+            point_infos.append(temp)
+        target_avg = target_avg / len(point_infos)
+        result_item['point'] = point_infos
+        result_item['avg'] = target_avg
+        result.append(result_item)
+    return result
+
+
+def analysisGraduationPointStudent(student_id):
+    result = []
+    # 获取所有的毕业要求
+    requirements = getGraduationRequirementList()
+    for target in requirements:
+        result_item = {"desc": target['name']}
+        target_id = target['id']
+        point_ids = getGraduationPoints(target_id)
+        target_results = getGraduationTarget(student_id, point_ids)
+        point_infos = []
+        target_avg = 0
+        for target_item in target_results:
+            desc = getGraduationPointInfo(target_item['id'])['description']
+            complete_percent = target_item['percent']
+            target_avg += complete_percent
+            temp = {'id': target_item['id'], 'desc': desc, 'value': complete_percent}
+            point_infos.append(temp)
+        target_avg = target_avg / len(point_infos)
+        result_item['point'] = point_infos
+        result_item['avg'] = target_avg
+        result.append(result_item)
+    return result
+
+
+def getStudentTargetCourse(target_id):
+    result = []
+    point_course = getPointCourses(target_id)
+    for item in point_course:
+        result_item = {'course_id': item['course_id'], 'proportion': item['proportion'],
+                       'expected_score': item['expected_score']}
+        course_id = item['course_id']
+        courseInfo = getCourseById(course_id)
+        result_item['course_name'] = courseInfo['course_name']
+        result_item['course_number'] = courseInfo['course_number']
+        result.append(result_item)
+    return result
+
+
+def getGraduationTargetList():
+    targetList = graduationPointList
+    return targetList
+
+
+def analysisGraduationTarget(target_id):
+    points_ids = getGraduationPoints(target_id)
+    points_result = getGraduationPointFinishedRatioByPointIds(points_ids)
+    result = []
+    for index, item in enumerate(points_result):
+        point_desc = getGraduationPointInfo(item['point_id'])
+        result_item = {'id': index, 'percent': item['percent'], 'desc': point_desc}
+        result.append(result_item)
+    return result
+
+
+if __name__ == '__main__':
+    print(teacherEvaLowGradeList())
